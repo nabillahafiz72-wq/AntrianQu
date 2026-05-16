@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <title>Tambah Data - AntrianQu</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body{
+            display:flex;
+            height:100vh;
+            background-color:#315b51;
+        }
+
+        .main-content{
+            flex:1;
+            background:linear-gradient(135deg, #447a6d 0%, #25463f 100%);
+            padding:40px;
+            color:white;
+
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .page-title{
+            font-size:2rem;
+            margin-bottom:30px;
+            text-align:center;
+        }
+
+        .form-card{
+            background:white;
+            width:500px;
+            max-width:90%;
+            border-radius:12px;
+            padding:30px;
+            box-shadow:0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .form-group{
+            margin-bottom:20px;
+        }
+
+        .form-group label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:bold;
+            color:#333;
+        }
+
+        .form-control{
+            width:100%;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:1rem;
+        }
+
+        .button-group{
+            display:flex;
+            gap:15px;
+            margin-top:25px;
+        }
+
+        .btn{
+            padding:12px 20px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:1rem;
+            text-decoration:none;
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            font-weight:500;
+            text-decoration: none;
+        }
+
+        .btn-save{
+            background-color:#0cab4b;
+            color:white;
+        }
+
+        .btn-save:hover{
+            background-color:#09913f;
+        }
+
+        .btn-back{
+            background-color:#7f8c8d;
+            color:white;
+        }
+
+        .btn-back:hover{
+            background-color:#6c7778;
+        }
+
+        a,
+        a:hover,
+        a:focus,
+        a:active{
+            text-decoration: none !important;
+        }
+
+        .btn-action{
+            text-decoration: none !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+
+        <h1 class="page-title">
+            Tambah Data Tujuan
+        </h1>
+
+        <div class="form-card">
+
+            <form method="POST" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label>Nama Tujuan</label>
+                    <input type="text" name="tujuan" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label>File Audio</label>
+                    <input type="file" name="file" class="form-control">
+                </div>
+
+                <div class="button-group">
+
+                    <button type="submit" class="btn btn-save">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Simpan
+                    </button>
+
+                    <a href="/admin_db3" class="btn btn-back">
+                        <i class="bi bi-arrow-left-circle-fill"></i>
+                        Kembali
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

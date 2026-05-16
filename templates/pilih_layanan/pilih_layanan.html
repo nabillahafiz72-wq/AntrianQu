@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Pilih Layanan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+<div class="menu-wrapper">
+<div class="container">
+    <h2>Pilih Layanan</h2>
+
+    <div class="grid">
+        
+<div class="card" onclick="pilih('teller')">
+            <div class="icon"><i class="bi bi-person"></i></div>
+            <h3>teller</h3>
+            <p>transaksi keuangan</p>
+        </div>
+
+        <div class="card" onclick="pilih('Customer Service')">
+            <div class="icon"><i class="bi bi-person-fill"></i></div>
+            <h3>Customer Service</h3>
+            <p>Bantuan & Informasi</p>
+        </div>
+
+        <div class="card" onclick="pilih('Pembukaan Rekening')">
+            <div class="icon"><i class="bi bi-bank"></i></div>
+            <h3>Pembukaan Rekening</h3>
+            <p>Buka Rekening baru</p>
+        </div>
+
+        <div class="card" onclick="pilih('Layanan Lain')">
+            <div class="icon"><i class="bi bi-journals"></i></div>
+            <h3>Layanan Lain</h3>
+            <p>Kebutuhan Lainnya</p>
+        </div>
+    </div>
+</div>
+
+<script>
+
+function pilih(layanan) {
+
+    if (layanan === "teller") {
+        window.location.href = "/antrian_teller";
+    }
+
+    else if (layanan === "Customer Service") {
+        window.location.href = "/antrian_cs";
+    }
+
+    else if (layanan === "Pembukaan Rekening") {
+        window.location.href = "/antrian_pk";
+    }
+
+    else if (layanan === "Layanan Lain") {
+        window.location.href = "/antrian_lainnya";
+    }
+}
+
+</script>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

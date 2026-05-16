@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>AntrianQu - Layanan Antrian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #315b51;
+        }
+
+       
+        .sidebar {
+            width: 200px;
+            background-color: #63988b;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .logo-area {
+            background-color: #0b3c43;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .menu-items {
+            flex-grow: 1;
+            padding-top: 10px;
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .menu-item.active {
+            background-color: #0b3c43;
+            color: #fff;
+        }
+
+        .logout-btn {
+    background-color: #a4c5bc;
+    color: #000;
+    padding: 10px;
+    margin: 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+
+    display: block;
+    width: calc(100% - 30px);
+}
+
+       
+        .main-content {
+            flex-grow: 1;
+            background: linear-gradient(135deg, #447a6d 0%, #25463f 100%);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .header-title {
+    color: white;
+    padding-left: 40px;
+    padding-top: 35px;
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+        .section-container {
+            padding: 20px 25px;
+        }
+
+        .section-title {
+    color: white;
+    font-size: 1.5rem;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    padding-left: 5px;
+    font-weight: 500;
+}
+       
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            table-layout: auto;
+        }
+
+        th {
+            background-color: white;
+            color: #333;
+            font-weight: bold;
+            padding: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .top-header th {
+            font-size: 1.1rem;
+            padding: 12px;
+        }
+
+        .sub-header th {
+            background-color: #c4ded5;
+            font-size: 0.9rem;
+            border: 1px solid #b2cfc4;
+        }
+
+        td {
+            padding: 12px 10px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center; /* Membuat tombol berada di tengah cell */
+            gap: 8px;               /* Mengatur jarak antar tombol */
+            align-items: center;
+        }
+
+
+.btn-action {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: normal;
+    text-decoration: none;
+    min-width: 90px;
+    justify-content: center;
+}
+        .btn-edit { background-color: #0cab4b; }
+        .btn-delete { background-color: #e71d36; }
+        .btn-add { background-color: #0cab4b; }
+        .btn-view { background-color: #7f8c8d; }
+
+     
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 45px;
+            height: 24px;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(21px);
+        }
+
+        .tujuan-cell{
+    text-align:left;
+    padding-left:20px;
+    min-width:220px;
+    white-space:nowrap;
+}
+
+.tujuan-cell p{
+    margin:6px 0;
+}
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div>
+            <div class="logo-area">AntrianQu</div>
+            <div class="menu-items">
+                <a href="/admin_db1" class="menu-item active"><i class="bi bi-person-plus-fill"></i> Group Antrian</a>
+                <a href="/admin_db2" class="menu-item"><i class="bi bi-people-fill"></i> Antrian</a>
+                <a href="/admin_db3" class="menu-item"><i class="bi bi-door-open-fill"></i> Referensi Tujuan</a>
+            </div>
+        </div>
+        <a href="/" class="logout-btn">Log out</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header-title">Layar Pelayanan</div>
+
+        <div class="section-container">
+ 
+            <table>
+                <tr class="top-header">
+                    <th colspan="5">Nama Antrian</th>
+                    <th colspan="2">Tujuan</th>
+                </tr>
+                <tr class="sub-header">
+                    <th width="50">No</th>
+                    <th>Nama Antrian</th>
+                    <th>Awalan</th>
+                    <th>Aktif</th>
+                    <th width="220">Action</th>
+                    <th style="min-width: 250px;">Nama Tujuan</th>
+                    <th width="220">Action</th>
+                </tr>
+
+<tbody>
+
+{% for item in data_antrian %}
+
+<tr>
+
+    <td>{{ loop.index }}</td>
+
+    <td>{{ item.nama }}</td>
+
+    <td>{{ item.awalan }}</td>
+
+    <td>
+        <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+        </label>
+    </td>
+
+    <td>
+        <div class="button-group">
+
+            <a href="/edit/{{ item.id }}" class="btn-action btn-edit">
+                <i class="bi bi-pencil-square"></i> Edit
+            </a>
+
+            <a href="/delete/{{ item.id }}"
+                class="btn-action btn-delete"
+                 onclick="return confirm('Yakin ingin menghapus data ini?')">
+            <i class="bi bi-x-circle"></i>
+            Delete
+            </a>
+        </div>
+    </td>
+
+    <td style="text-align:left; padding-left:20px; min-width:250px;">
+
+    {% for tujuan in item.tujuan %}
+        <div style="margin-bottom:8px;">
+            {{ tujuan }}
+        </div>
+    {% endfor %}
+
+</td>
+    <td>
+        <div class="button-group">
+
+            <a href="/tambah" class="btn-action btn-add">
+                <i class="bi bi-plus-lg"></i> Add
+            </a>
+
+            <a href="/view/{{ item.id }}" class="btn-action btn-view">
+                <i class="bi bi-eye-fill"></i> View
+            </a>
+
+        </div>
+    </td>
+
+</tr>
+{% endfor %}
+</tbody> 
+                </tr>
+            </table>
+
+            <h2 class="section-title">Layar Antrian</h2>
+            
+
+            <table>
+                <tr class="top-header">
+                    <th colspan="5">Nama Antrian</th>
+                    <th colspan="2">Tujuan</th>
+                </tr>
+                <tr class="sub-header">
+                    <th width="50">No</th>
+                    <th>Nama Antrian</th>
+                    <th>Awalan</th>
+                    <th>Aktif</th>
+                    <th width="220">Action</th>
+                    <th>Nama Tujuan</th>
+                    <th width="220">Action</th>
+                </tr>
+ 
+<tbody>
+
+{% for item in data_layar %}
+
+<tr>
+
+    <td>{{ loop.index }}</td>
+
+    <td>{{ item.nama }}</td>
+
+    <td>{{ item.awalan }}</td>
+
+    <td>
+        <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+        </label>
+    </td>
+
+    <td>
+
+        <div class="button-group">
+
+            <a href="/edit_layar/{{ item.id }}"
+               class="btn-action btn-edit">
+
+                <i class="bi bi-pencil-square"></i>
+                Edit
+
+            </a>
+
+            <a href="/delete_layar/{{ item.id }}"
+               class="btn-action btn-delete"
+               onclick="return confirm('Yakin ingin menghapus data ini?')">
+
+                <i class="bi bi-x-circle"></i>
+                Delete
+
+            </a>
+
+        </div>
+
+    </td>
+
+    <td class="tujuan-cell">
+
+        {% for tujuan in item.tujuan %}
+
+            <div class="tujuan-item">
+                {{ tujuan }}
+            </div>
+
+        {% endfor %}
+
+    </td>
+
+    <td>
+
+        <div class="button-group">
+
+            <a href="/tambah"
+               class="btn-action btn-add">
+
+                <i class="bi bi-plus-lg"></i>
+                Add
+
+            </a>
+
+            <a href="/view_layar/{{ item.id }}"
+               class="btn-action btn-view">
+
+                <i class="bi bi-eye-fill"></i>
+                View
+
+            </a>
+
+        </div>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+            </table>
+
+        </div>
+    </div>
+
+   
+    <script>
+        function actionCall(action, item) {
+            alert(action + " diklik untuk item: " + item);
+        }
+
+        function toggleStatus(item, isChecked) {
+            let status = isChecked ? "Aktif" : "Non-aktif";
+            console.log("Status " + item + " diubah menjadi: " + status);
+        }
+    </script>
+</body>
+</html>

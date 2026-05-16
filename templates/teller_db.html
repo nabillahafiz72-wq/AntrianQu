@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panggil Antrian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(180deg, #4F7F66 0%, #2C5641 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 60px;
+            background-color: #c8d8d0;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            font-size: 30px;
+            font-weight: bold;
+            color: #2C5641;
+        }
+
+        .btn-logout {
+            background-color: #8EBFB0;
+            color: #244735;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background-color: #7bb0a0;
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 150%;
+            background-color: white;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 100px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th {
+            padding: 15px;
+            font-size: 14px;
+            color: #111;
+            border-bottom: 1px solid #ddd;
+        }
+
+        td {
+            padding: 12px;
+            font-size: 14px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr.active td {
+            background-color: #CFE2D8;
+        }
+
+        .tujuan-text {
+            text-align: center;
+            font-weight: bold;
+            padding-left: 20px;
+        }
+
+        .btn {
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            width: 110px;
+        }
+
+        .btn-panggil {
+            background-color: #838887;
+        }
+
+        .btn-ulang {
+            background-color: #F8A53B;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="navbar">
+        <h1>Panggil Antrian</h1>
+        <a href="/" style="text-decoration: none;">
+            <button class="btn-logout" onclick="logout()">Log out</button>
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Tujuan</th>
+                        <th>Jml.Antrian</th>
+                        <th>No.Antrian</th>
+                        <th>Sisa</th>
+                        <th>Panggil</th>
+                        <th>Panggil ulang</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>{{ total }}</td>
+                        <td>{{ terakhir }}</td>
+                        <td>{{ sisa }}</td>
+                    </tr>
+                </tbody>
+
+                <tbody>
+                    <tr class="active">
+                        <td>1.</td>
+                        <td class="tujuan-text">Setoran</td>
+                        <td>3</td>
+                        <td id="no-1">2</td>
+                        <td id="sisa-1">1</td>
+                        <td><button class="btn btn-panggil" onclick="calling()">Panggil</button></td>
+                        <td><button class="btn btn-ulang" onclick="ulang(1)">Panggil Ulang</button></td>
+                    </tr>
+                    <tr>
+                        <td>2.</td>
+                        <td class="tujuan-text">Penarikan</td>
+                        <td>8</td>
+                        <td id="no-2">4</td>
+                        <td id="sisa-2">4</td>
+                        <td><button class="btn btn-panggil" onclick="calling()">Panggil</button></td>
+                        <td><button class="btn btn-ulang" onclick="ulang(2)">Panggil Ulang</button></td>
+                    </tr>
+                    <tr class="active">
+                        <td>3.</td>
+                        <td class="tujuan-text">Penukaran Uang</td>
+                        <td>5</td>
+                        <td id="no-3">4</td>
+                        <td id="sisa-3">1</td>
+                        <td><button class="btn btn-panggil" onclick="calling()">Panggil</button></td>
+                        <td><button class="btn btn-ulang" onclick="ulang(3)">Panggil Ulang</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <script>
+
+        function calling() {
+
+            // 1. Create a new Audio object with the path to your file
+            const audio = new Audio("{{url_for('static', filename='audio/panggilan_2.mp3')}}");
+
+            // 2. Call the play() method
+            audio.play();
+        }
+    </script>
+</body>
+
+</html>

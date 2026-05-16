@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Ambil Antrian</title>   
+</head>
+<body>
+
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+    body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh; 
+    background: linear-gradient(to bottom right, #6fa287, #24413a);
+    background-attachment: fixed; 
+    background-size: cover;
+}
+
+.menu-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 102vh;
+    width:100%;
+    background: linear-gradient(to bottom right, #6fa287, #24413a); 
+    padding: 20px;
+}
+
+
+.container {
+    width: 100%;
+    max-width: 750px;
+    text-align: center;
+}
+
+
+h2 {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    font-family: Arial, sans-serif;
+}
+
+
+.grid-antrian {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 30px;
+    justify-items: center; 
+}
+
+
+.card {
+    background-color: #c9ded3; 
+    color: #24413a; 
+    padding: 50px 20px; 
+    border-radius: 15px; 
+    cursor: pointer;
+    transition: 0.3s ease;
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+}
+
+.card h3 {
+    font-size: 24px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+
+.card:hover {
+    transform: translateY(-3px);
+    background-color: #b8cfc3;
+}
+
+
+.card-wide {
+    grid-column: 1 / span 2; 
+    max-width: 340px; 
+}
+
+
+@media (max-width: 600px) {
+    .grid-antrian {
+        grid-template-columns: 1fr; 
+    }
+    .card-wide {
+        grid-column: auto; 
+    }
+}
+
+</style>
+
+    <div class="menu-wrapper">
+    <div class="container">
+        <h2>Ambil Antrian</h2>
+
+        <div class="grid-antrian">
+            
+            <div class="card" onclick="pilih('Setoran')">
+                <h3>jasa transfer</h3>
+            </div>
+
+            <div class="card" onclick="pilih('Penarikan')">
+                <h3>safe deposit box</h3>
+            </div>
+
+            <div class="card" onclick="pilih('Penukaran Uang')">
+                <h3>payment point</h3>
+            </div>
+
+            <div class="card" onclick="pilih('Penukaran Uang')">
+                <h3>E-Banking </h3>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+function pilih(layanan) {
+    window.location.href = "/success";
+}
+</script>
+
+</body>
+</html>

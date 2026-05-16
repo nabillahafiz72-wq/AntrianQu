@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    
+</head>
+<body>
+
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(to bottom right, #6fa287, #24413a);
+}
+
+/* Container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Card */
+.card {
+    background: #b9cec3;
+    padding: 70px 90px;
+    border-radius: 20px;
+    text-align: center;
+    width: 500px;
+}
+
+/* Title */
+.card h2 {
+    margin-bottom: 30px;
+    color: #000;
+}
+
+/* Button */
+.card button {
+    display: block;
+    width: 100%;
+    margin: 15px 0;
+    padding: 15px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #e0e0e0;
+    font-size: 25px;
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.card button:hover {
+    background: #cfcfcf;
+}
+</style>
+
+<div class="login-container">
+    <div class="card">
+        <h2>Masuk Sebagai!</h2>
+
+        <button onclick="masuk('admin')">Admin</button>
+        <button onclick="masuk('teller')">Teller</button>
+    </div>
+</div>
+
+<script>
+function masuk(role) {
+
+    if (role === "admin") {
+        window.location.href = "/login";
+    } 
+    
+    else if (role === "teller") {
+        window.location.href = "/login";
+    }
+}
+</script>
+
+</body>
+</html>

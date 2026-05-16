@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>AntrianQu - Dashboard</title>
+    <style>
+        /* CSS DASAR DARI ANDA DENGAN PENYESUAIAN VISUAL */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #315b51; /* Warna hijau dasar */
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #63988b;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .logo-area {
+            background-color: #0b3c43;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .menu-items {
+            flex-grow: 1;
+            padding-top: 10px;
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .menu-item.active {
+            background-color: #0b3c43;
+            color: #fff;
+        }
+
+        .logout-btn {
+    background-color: #a4c5bc;
+    color: #000;
+    padding: 10px;
+    margin: 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+
+    display: block;
+    width: calc(100% - 30px);
+}
+    
+        .main-content {
+            flex-grow: 1;
+            background: linear-gradient(135deg, #447a6d 0%, #25463f 100%);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .header-title {
+            color: white;
+            padding: 20px 30px;
+            font-size: 2rem; /* Ukuran "Tujuan" yang besar */
+            font-weight: 500;
+        }
+
+        .section-container {
+            padding: 0 30px 30px 30px;
+        }
+
+        .btn-add-data{
+    background-color:#0cab4b;
+    color:white;
+    padding:12px 20px;
+    border-radius:5px;
+    font-weight:bold;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:30px;
+}
+
+.btn-add-data:hover{
+    background-color:#09913f;
+}
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background-color: #cbd5d0; /* Warna header tabel */
+            color: #333;
+            font-weight: bold;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #b2cfc4;
+        }
+
+        td {
+            padding: 12px 15px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #b2cfc4;
+            color: #000;
+        }
+
+        /* Audio File Box Styling */
+        .audio-box {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: 1px solid #999;
+            display: inline-block;
+            min-width: 180px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Button Group in Action Column */
+        .button-group {
+            display: flex;
+            justify-content: center; 
+            gap: 10px;               
+            align-items: center;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin: 2px;
+        }
+
+
+
+        .btn-edit { background-color: #0cab4b; }
+        .btn-delete { background-color: #e71d36; }
+
+        a{
+            text-decoration:none;
+        }
+
+    </style>
+</head>
+<body>
+
+    
+    <div class="sidebar">
+        <div>
+            <div class="logo-area">AntrianQu</div>
+            <div class="menu-items">
+                <a href="/admin_db1" class="menu-item"><i class="bi bi-person-plus-fill"></i> Group Antrian</a>
+                <a href="/admin_db2" class="menu-item"><i class="bi bi-people-fill"></i> Antrian</a>
+                <a href="/admin_db3" class="menu-item active"><i class="bi bi-door-open-fill"></i> Referensi Tujuan</a>
+            </div>
+        </div>
+        <a href="/" class="logout-btn">Log out</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header-title">Tujuan</div>
+        
+        <div class="section-container">
+            <a href="/tambah_tujuan" class="btn-add-data">
+                <i class="bi bi-plus-lg"></i> Tambah Data 
+        </a>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">No</th>
+                        <th>Nama Tujuan</th>
+                        <th>File Audio</th>
+                        <th style="text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+{% for item in data_tujuan %}
+
+<tr>
+
+    <td>{{ loop.index }}</td>
+
+    <td>{{ item.tujuan }}</td>
+
+    <td>
+        <div class="audio-box">
+            {{ item.file }}
+        </div>
+    </td>
+
+    <td>
+
+        <div class="button-group">
+
+            <a href="/edit_tujuan/{{ item.id }}"
+               class="btn btn-edit">
+
+                <i class="bi bi-pencil-square"></i>
+                Edit
+
+            </a>
+
+            <a href="{{ url_for('delete_tujuan', id=item.id) }}"
+               class="btn btn-delete"
+               onclick="return confirm('Yakin ingin menghapus data ini?')">
+
+                <i class="bi bi-x-circle"></i>
+                Delete
+
+            </a>
+
+        </div>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+              
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
