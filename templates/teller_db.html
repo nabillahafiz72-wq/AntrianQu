@@ -147,57 +147,107 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    <tr>
-                        <td>{{ total }}</td>
-                        <td>{{ terakhir }}</td>
-                        <td>{{ sisa }}</td>
-                    </tr>
-                </tbody>
-
-                <tbody>
-                    <tr class="active">
-                        <td>1.</td>
-                        <td class="tujuan-text">Setoran</td>
-                        <td>3</td>
-                        <td id="no-1">2</td>
-                        <td id="sisa-1">1</td>
-                        <td><button class="btn btn-panggil" onclick="calling()">Panggil</button></td>
-                        <td><button class="btn btn-ulang" onclick="ulang(1)">Panggil Ulang</button></td>
-                    </tr>
-                    <tr>
-                        <td>2.</td>
-                        <td class="tujuan-text">Penarikan</td>
-                        <td>8</td>
-                        <td id="no-2">4</td>
-                        <td id="sisa-2">4</td>
-                        <td><button class="btn btn-panggil" onclick="calling()">Panggil</button></td>
-                        <td><button class="btn btn-ulang" onclick="ulang(2)">Panggil Ulang</button></td>
-                    </tr>
-                    <tr class="active">
-                        <td>3.</td>
-                        <td class="tujuan-text">Penukaran Uang</td>
-                        <td>5</td>
-                        <td id="no-3">4</td>
-                        <td id="sisa-3">1</td>
-                        <td><button class="btn btn-panggil" onclick="calling()">Panggil</button></td>
-                        <td><button class="btn btn-ulang" onclick="ulang(3)">Panggil Ulang</button></td>
-                    </tr>
-                </tbody>
-            </table>
+    {% for antrian in daftar_antrian %}
+    <tr class="{% if loop.index is odd %}active{% endif %}">
+        <td>{{ loop.index }}.</td>
+        <td class="tujuan-text">
+            {% if antrian.id_baris == 1 %}Setoran
+            {% elif antrian.id_baris == 2 %}Penarikan
+            {% else %}Penukaran Uang{% endif %}
+        </td>
+        <td id="jml-{{ antrian.id_baris }}">{{ antrian.jml_antrian }}</td>
+        <td id="no-{{ antrian.id_baris }}">{{ antrian.no_antrian }}</td>
+        <td id="sisa-{{ antrian.id_baris }}">{{ antrian.sisa }}</td>
+        
+        {% set kode_huruf = 'B' if antrian.id_baris == 1 else ('C' if antrian.id_baris == 2 else 'D') %}
+        {% set file_loket = 'silakan-ke-setoran.mp3' if antrian.id_baris == 1 else ('silakan-ke-penarikan.mp3' if antrian.id_baris == 2 else 'silakan-ke-penukaran.mp3') %}
+        
+        <td><button class="btn btn-panggil" onclick="calling('{{ antrian.id_baris }}', '{{ kode_huruf }}', '{{ file_loket }}')">Panggil</button></td>
+        <td><button class="btn btn-ulang" onclick="ulang('{{ antrian.id_baris }}', '{{ kode_huruf }}', '{{ file_loket }}')">Panggil Ulang</button></td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
 
         </div>
     </div>
     <script>
+    function putarAntrean(namaFileNomor, fileLoket) {
+        const folderAudio = "{{ url_for('static', filename='audio/') }}";
+        
+        const daftarSuara = [
+            folderAudio + "nomor-antrean.mp3",  // 1. "Nomor antrean..."
+            folderAudio + namaFileNomor + ".mp3", // 2. Memanggil file dinamis (Contoh: B003.mp3)
+            folderAudio + fileLoket             // 3. "...silakan menuju ke loket X"
+        ];
 
-        function calling() {
+        let index = 0;
 
-            // 1. Create a new Audio object with the path to your file
-            const audio = new Audio("{{url_for('static', filename='audio/panggilan_2.mp3')}}");
+        function putarMasingMasing() {
+            if (index < daftarSuara.length) {
+                const pathAudio = daftarSuara[index] + "?v=" + new Date().getTime();
+                const audio = new Audio(pathAudio);
+                
+                audio.onended = function() {
+                    index++;
+                    putarMasingMasing();
+                };
 
-            // 2. Call the play() method
-            audio.play();
+                audio.play().catch(error => {
+                    console.log("Gagal memutar potongan audio index ke-" + index, error);
+                });
+            }
         }
+        putarMasingMasing();
+    }
+
+
+    function formatTigaDigit(angka) {
+        return String(angka).padStart(3, '0');
+    }
+
+function calling(idBaris, kodeHuruf, fileLoket) {
+        // Tembak data POST ke API Python menggunakan ID Baris yang baru
+        fetch('/panggil-antrian-api/' + idBaris, { method: 'POST' })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Tangkap nomor antrean terbaru dan sisa dari database MySQL
+            const elemenNo = document.getElementById('no-' + idBaris);
+            const elemenSisa = document.getElementById('sisa-' + idBaris);
+            
+            elemenNo.innerText = data.no_antrian;
+            elemenSisa.innerText = data.sisa;
+        
+            const namaFileNomor = kodeHuruf + formatTigaDigit(data.no_antrian);
+
+            putarAntrean(namaFileNomor, fileLoket);
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+    }
+
+    // Fungsi Panggil Ulang Menggunakan Nomor Aktif Tabel
+    function ulang(idBaris, kodeHuruf, fileLoket) {
+        const elemenNo = document.getElementById('no-' + idBaris);
+        let noAntrianSaatIni = parseInt(elemenNo.innerText);
+        
+        if(noAntrianSaatIni === 0) {
+            alert("Belum ada antrean yang dipanggil!");
+            return;
+        }
+
+        // Gabungkan huruf + angka tiga digit saat ini (Hasil: "B002")
+        const namaFileNomor = kodeHuruf + formatTigaDigit(noAntrianSaatIni);
+        putarAntrean(namaFileNomor, fileLoket);
+    }
+
+    
     </script>
 </body>
 

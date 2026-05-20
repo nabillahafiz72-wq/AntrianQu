@@ -246,207 +246,194 @@
     </div>
 
     <div class="main-content">
-        <div class="header-title">Layar Pelayanan</div>
 
         <div class="section-container">
- 
-            <table>
-                <tr class="top-header">
-                    <th colspan="5">Nama Antrian</th>
-                    <th colspan="2">Tujuan</th>
-                </tr>
-                <tr class="sub-header">
-                    <th width="50">No</th>
-                    <th>Nama Antrian</th>
-                    <th>Awalan</th>
-                    <th>Aktif</th>
-                    <th width="220">Action</th>
-                    <th style="min-width: 250px;">Nama Tujuan</th>
-                    <th width="220">Action</th>
-                </tr>
 
-<tbody>
+    <h2 class="section-title" style="color: white; margin-top: 10px;">Layar Pelayanan</h2>
+<table>
+    <tr class="top-header">
+        <th colspan="5">Nama Antrian</th>
+        <th colspan="2">Tujuan</th>
+    </tr>
+    <tr class="sub-header">
+        <th width="50">No</th>
+        <th>Nama Antrian</th>
+        <th>Awalan</th>
+        <th>Aktif</th>
+        <th width="220">Action</th>
+        <th style="min-width: 250px;">Nama Tujuan</th>
+        <th width="220">Action</th>
+    </tr>
 
-{% for item in data_antrian %}
+    <tbody>
+        {% for item in data_antrian %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ item.nama_loket }}</td>
+            <td>{{ item.awalan if item.awalan else 'A' }}</td>
+            <td>
+                <label class="switch">
+                    {% if item.status == 'buka' or item.status == 'aktif' %}
+                        <input type="checkbox" checked onchange="ubahStatusLoket('{{ item.id_loket }}', this.checked)">
+                    {% else %}
+                        <input type="checkbox" onchange="ubahStatusLoket('{{ item.id_loket }}', this.checked)">
+                    {% endif %}
+                    <span class="slider"></span>
+                </label>
+            </td>
 
-<tr>
+            <td>
+                <div class="action-group">
+                    <a href="{{ url_for('edit', id=item.id_loket) }}" class="btn-action btn-edit">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <a href="{{ url_for('delete', id=item.id_loket) }}" class="btn-action btn-delete" onclick="return confirm('Yakin ingin menghapus data ini?')">
+                        <i class="bi bi-x-circle"></i> Delete
+                    </a>
+                </div>
+            </td>
 
-    <td>{{ loop.index }}</td>
+            <td style="text-align: left; padding: 15px 0 15px 25px; line-height: 1.8;">
+                {% if item.tujuan %}
+                    {% if item.tujuan is string %}
 
-    <td>{{ item.nama }}</td>
+                        {% for t in item.tujuan.split(',') %}
+                            <div style="margin-bottom: 4px;">{{ t.strip() }}</div>
+                        {% endfor %}
+                    {% else %}
 
-    <td>{{ item.awalan }}</td>
+                        {% for t in item.tujuan %}
+                            <div style="margin-bottom: 4px;">{{ t }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+                 -
+            {% endif %}
 
-    <td>
-        <label class="switch">
-            <input type="checkbox" checked>
-            <span class="slider"></span>
-        </label>
-    </td>
+            </td>
 
-    <td>
-        <div class="button-group">
-
-            <a href="/edit/{{ item.id }}" class="btn-action btn-edit">
-                <i class="bi bi-pencil-square"></i> Edit
-            </a>
-
-            <a href="/delete/{{ item.id }}"
-                class="btn-action btn-delete"
-                 onclick="return confirm('Yakin ingin menghapus data ini?')">
-            <i class="bi bi-x-circle"></i>
-            Delete
-            </a>
-        </div>
-    </td>
-
-    <td style="text-align:left; padding-left:20px; min-width:250px;">
-
-    {% for tujuan in item.tujuan %}
-        <div style="margin-bottom:8px;">
-            {{ tujuan }}
-        </div>
+            <td>
+                <div class="button-group">
+                    <a href="{{ url_for('tambah') }}" class="btn-action btn-add">
+                        <i class="bi bi-plus-lg"></i> Add
+                    </a>
+                    <a href="{{ url_for('view', id=item.id_loket) }}" class="btn-action btn-view">
+                        <i class="bi bi-eye-fill"></i> View
+                    </a>
+                </div>
+            </td>
+        </tr>
+    {% else %}
+    <tr>
+        <td colspan="7" style="text-align: center; padding: 20px; color: gray;">Belum ada data di database.</td>
+    </tr>
     {% endfor %}
+    </tbody> 
+</table>
 
-</td>
-    <td>
-        <div class="button-group">
+    <h2 class="section-title" style="color: white; margin-top: 30px;">Layar Antrian</h2>
+    <table>
+        <tr class="top-header">
+            <th colspan="5">Nama Antrian</th>
+            <th colspan="2">Tujuan</th>
+        </tr>
+        <tr class="sub-header">
+            <th width="50">No</th>
+            <th>Nama Antrian</th>
+            <th>Awalan</th>
+            <th width="80">Aktif</th>
+            <th width="180">Action</th>
+            <th style="min-width: 200px; text-align: left; padding-left: 20px;">Nama Tujuan</th>
+            <th width="180">Action</th>
+        </tr>
+        <tbody>
+            {% for item in data_layar %}
+            <tr>
+                <td>{{ loop.index }}.</td>
+                <td>{{ item.nama_layanan }}</td>
+                <td>
+                   {{ item.awalan if item.awalan else '-' }}
+                </td>
+                <td>
+                    <label class="switch">
+                        {% if item.status_aktif_non_aktif == 'aktif' %}
+                            <input type="checkbox" checked onchange="ubahStatusLayanan('{{ item.id_layanan }}', this.checked)">
+                        {% else %}
+                            <input type="checkbox" onchange="ubahStatusLayanan('{{ item.id_layanan }}', this.checked)">
+                        {% endif %}
+                        <span class="slider"></span>
+                    </label>
+                </td>
+                <td>
+                    <div class="button-group">
+                        <a href="{{ url_for('edit_layar', id=item.id_layanan) }}" class="btn-action btn-edit"><i class="bi bi-pencil-square"></i> Edit</a>
+                        <a href="{{ url_for('delete_layar', id=item.id_layanan) }}" class="btn-action btn-delete" onclick="return confirm('Yakin ingin menghapus data ini?')"><i class="bi bi-x-circle"></i> Delete</a>
+                    </div>
+                </td>
+                <td >
+                     {% if item.tujuan %}
+            {% if item.tujuan is string %}
+                {% for t in item.tujuan.split(',') %}
+                    <div style="margin-bottom: 4px;">{{ t.strip() }}</div>
+                {% endfor %}
+            {% else %}
+                {% for t in item.tujuan %}
+                    <div style="margin-bottom: 4px;">{{ t }}</div>
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            -
+        {% endif %}
+                </td>
+                <td>
+                    <div class="button-group">
+                        <a href="{{ url_for('tambah_layar') }}" class="btn-action btn-add"><i class="bi bi-plus-circle"></i> Add</a>
+                        <a href="{{ url_for('view_layar', id=item.id_layanan) }}" class="btn-action btn-view"><i class="bi bi-eye-fill"></i> View</a>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 20px; color: gray;">Belum ada data layar antrian.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-            <a href="/tambah" class="btn-action btn-add">
-                <i class="bi bi-plus-lg"></i> Add
-            </a>
+</div>
+</div>
 
-            <a href="/view/{{ item.id }}" class="btn-action btn-view">
-                <i class="bi bi-eye-fill"></i> View
-            </a>
+<script>
+    function actionCall(action, item) {
+        alert(action + " diklik untuk item: " + item);
+    }
 
-        </div>
-    </td>
+    function toggleStatus(item, isChecked) {
+        let status = isChecked ? "Aktif" : "Non-aktif";
+        console.log("Status " + item + " diubah menjadi: " + status);
+    }
 
-</tr>
-{% endfor %}
-</tbody> 
-                </tr>
-            </table>
+    function ubahStatusLoket(idLoket, isChecked) {
+        fetch('/toggle_loket/' + idLoket, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ aktif: isChecked })
+        })
+        .then(response => response.json())
+        .then(data => { console.log(data.message); })
+        .catch(error => console.error('Error:', error));
+    }
 
-            <h2 class="section-title">Layar Antrian</h2>
-            
-
-            <table>
-                <tr class="top-header">
-                    <th colspan="5">Nama Antrian</th>
-                    <th colspan="2">Tujuan</th>
-                </tr>
-                <tr class="sub-header">
-                    <th width="50">No</th>
-                    <th>Nama Antrian</th>
-                    <th>Awalan</th>
-                    <th>Aktif</th>
-                    <th width="220">Action</th>
-                    <th>Nama Tujuan</th>
-                    <th width="220">Action</th>
-                </tr>
- 
-<tbody>
-
-{% for item in data_layar %}
-
-<tr>
-
-    <td>{{ loop.index }}</td>
-
-    <td>{{ item.nama }}</td>
-
-    <td>{{ item.awalan }}</td>
-
-    <td>
-        <label class="switch">
-            <input type="checkbox" checked>
-            <span class="slider"></span>
-        </label>
-    </td>
-
-    <td>
-
-        <div class="button-group">
-
-            <a href="/edit_layar/{{ item.id }}"
-               class="btn-action btn-edit">
-
-                <i class="bi bi-pencil-square"></i>
-                Edit
-
-            </a>
-
-            <a href="/delete_layar/{{ item.id }}"
-               class="btn-action btn-delete"
-               onclick="return confirm('Yakin ingin menghapus data ini?')">
-
-                <i class="bi bi-x-circle"></i>
-                Delete
-
-            </a>
-
-        </div>
-
-    </td>
-
-    <td class="tujuan-cell">
-
-        {% for tujuan in item.tujuan %}
-
-            <div class="tujuan-item">
-                {{ tujuan }}
-            </div>
-
-        {% endfor %}
-
-    </td>
-
-    <td>
-
-        <div class="button-group">
-
-            <a href="/tambah"
-               class="btn-action btn-add">
-
-                <i class="bi bi-plus-lg"></i>
-                Add
-
-            </a>
-
-            <a href="/view_layar/{{ item.id }}"
-               class="btn-action btn-view">
-
-                <i class="bi bi-eye-fill"></i>
-                View
-
-            </a>
-
-        </div>
-
-    </td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-            </table>
-
-        </div>
-    </div>
-
-   
-    <script>
-        function actionCall(action, item) {
-            alert(action + " diklik untuk item: " + item);
-        }
-
-        function toggleStatus(item, isChecked) {
-            let status = isChecked ? "Aktif" : "Non-aktif";
-            console.log("Status " + item + " diubah menjadi: " + status);
-        }
-    </script>
+    function ubahStatusLayanan(idLayanan, isChecked) {
+        fetch('/toggle_layanan/' + idLayanan, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ aktif: isChecked })
+        })
+        .then(response => response.json())
+        .then(data => { console.log(data.message); })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
 </body>
 </html>

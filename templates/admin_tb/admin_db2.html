@@ -244,13 +244,8 @@
     </div>
 
 
-    <div class="main-content">
-        <h1 class="header-title">Antrian</h1>
-
-        <a href="/tambah_admin2" class="btn-tambah">
-            <i class="bi bi-plus-lg"></i> Tambah Data
-        </a>
-
+    <div class="main-content"><h1 class="header-title">Antrian</h1>
+        <a href="{{ url_for('tambah_admin2') }}" class="btn-tambah"><i class="bi bi-plus-lg"></i> Tambah Data</a>
         <h2 class="category-title">Kategori Antrian: Loket</h2>
 
         <table>
@@ -264,58 +259,58 @@
                 </tr>
             </thead>
             <tbody>
-
-{% for item in data_admin2 %}
-
-<tr>
-
-    <td>{{ loop.index }}</td>
-
-    <td>{{ item.awalan }}</td>
-
-    <td>{{ item.tujuan }}</td>
+    {% for item in data_admin2 %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ item.awalan if item.awalan else '-' }}</td>
+        <td>
+            {% if item.tujuan %}
+                {% if item.tujuan is string %}
+                    {% for t in item.tujuan.split(',') %}
+                        <div style="margin-bottom: 4px;">{{ t.strip() }}</div>
+                    {% endfor %}
+                {% elif item.tujuan is iterable and item.tujuan is not string %}
+                    {% for t in item.tujuan %}
+                        <div style="margin-bottom: 4px;">{{ t }}</div>
+                    {% endfor %}
+                {% else %}
+                    <div style="margin-bottom: 4px;">{{ item.tujuan }}</div>
+                {% endif %}
+            {% else %}
+                <div style="margin-bottom: 4px;">{{ item.nama_layanan }}</div>
+            {% endif %}
+        </td>
 
     <td>
         <label class="switch">
-            <input type="checkbox" checked>
-            <span class="slider"></span>
+                        {% if item.status_aktif_non_aktif == 'aktif' %}
+                            <input type="checkbox" checked onchange="ubahStatusLayanan('{{ item.id_layanan }}', this.checked)">
+                        {% else %}
+                            <input type="checkbox" onchange="ubahStatusLayanan('{{ item.id_layanan }}', this.checked)">
+                        {% endif %}
+                        <span class="slider"></span>
         </label>
     </td>
-
     <td>
+         {% set id_lay = item.id_layanan %}
 
         <div class="action-group">
-
-            <a href="/edit_admin2/{{ item.id }}"
-               class="btn-action btn-edit">
-
-                <i class="bi bi-pencil-square"></i>
-                Edit
-
+            <a href="{{ url_for('edit_admin2', id=item.id_layanan) }}" class="btn-action btn-edit">
+                <i class="bi bi-pencil-square"></i> Edit
             </a>
-
-            <a href="/delete_admin2/{{ item.id }}"
-               class="btn-action btn-delete"
-               onclick="return confirm('Yakin ingin menghapus data ini?')">
-
-                <i class="bi bi-x-circle"></i>
-                Delete
-
-            </a>
-
+            <a href="{{ url_for('delete_admin2', id=item.id_layanan) }}" class="btn-action btn-delete" onclick="return confirm('Yakin ingin menghapus data ini?')">
+                <i class="bi bi-x-circle"></i>Delete</a>
         </div>
-
     </td>
-
 </tr>
-
-{% endfor %}
-
+{% else %}
+    <tr>
+        <td colspan="5" style="text-align: center;">Belum ada data antrian.</td>
+    </tr>
+    {% endfor %}
 </tbody>
         </table>
     </div>
-
-    <!-- JavaScript -->
     <script>
         function actionCall(action, item) {
             alert(action + " diklik untuk: " + item);
@@ -325,6 +320,8 @@
             let status = isChecked ? "Aktif" : "Non-aktif";
             console.log("Status " + item + " diubah menjadi: " + status);
         }
+
+        
     </script>
 </body>
 </html>

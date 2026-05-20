@@ -110,7 +110,7 @@
                 </div>
 
                 <div class="info-value">
-                    {{ data.nama }}
+                    {{ data.nama_loket }}
                 </div>
 
             </div>
@@ -128,31 +128,20 @@
             </div>
 
             <div class="info-group">
-
-                <div class="info-label">
-                    Nama Tujuan
+                <div class="info-label">Nama Tujuan</div>
+                <div class="info-value" style="white-space: pre-line; min-height: 45px; height: auto;">
+                     {{ data.tujuan if data.tujuan else 'Belum ada tujuan' }}
                 </div>
-
-                <div class="info-value">
-
-                    {% for tujuan in data.tujuan %}
-
-                        <div class="tujuan-item">
-                            {{ tujuan }}
-                        </div>
-
-                    {% endfor %}
-
-                </div>
-
             </div>
 
-            <a href="/admin_db1" class="btn-back">
+            <div class="button-group" style="margin-top: 25px; display: flex; justify-content: flex-start;">
+            <a href="/admin_db1" class="btn btn-back" style="background-color: #7f8c8d; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 500;">
                 <i class="bi bi-arrow-left-circle-fill"></i>
                 Kembali
             </a>
-
         </div>
+
+    </div>
 
     </div>
 

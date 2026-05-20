@@ -192,7 +192,7 @@
             <div class="menu-items">
                 <a href="/admin_db1" class="menu-item"><i class="bi bi-person-plus-fill"></i> Group Antrian</a>
                 <a href="/admin_db2" class="menu-item"><i class="bi bi-people-fill"></i> Antrian</a>
-                <a href="/admin_db3" class="menu-item active"><i class="bi bi-door-open-fill"></i> Referensi Tujuan</a>
+                <a href="{{ url_for('admin_db3') }}" class="menu-item active"><i class="bi bi-door-open-fill"></i> Referensi Tujuan</a>
             </div>
         </div>
         <a href="/" class="logout-btn">Log out</a>
@@ -202,7 +202,7 @@
         <div class="header-title">Tujuan</div>
         
         <div class="section-container">
-            <a href="/tambah_tujuan" class="btn-add-data">
+            <a href="{{ url_for('tambah_tujuan') }}" class="btn-add-data">
                 <i class="bi bi-plus-lg"></i> Tambah Data 
         </a>
             <table>
@@ -234,7 +234,7 @@
 
         <div class="button-group">
 
-            <a href="/edit_tujuan/{{ item.id }}"
+            <a href="{{ url_for ('edit_tujuan', id=item.id) }}"
                class="btn btn-edit">
 
                 <i class="bi bi-pencil-square"></i>
